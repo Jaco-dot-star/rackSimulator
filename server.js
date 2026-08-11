@@ -292,7 +292,7 @@ app.get('/api/verify/:rackId', async (req, res) => {
 app.get('/api/ping', (req, res) => res.status(200).send('pong'));
 
 // Keep-alive mechanism for Render
-const KEEP_ALIVE_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+const KEEP_ALIVE_URL = process.env.BACKEND_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
 setInterval(() => {
     fetch(`${KEEP_ALIVE_URL}/api/ping`).catch(err => console.error('Keep-alive ping failed:', err.message));
 }, 30000); // 30 seconds
