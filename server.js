@@ -42,6 +42,18 @@ pgPool.connect().then(async (client) => {
             );
         `);
         console.log('Database tables verified/created');
+        
+        // Seed dummy racks if empty
+        const res = await client.query('SELECT COUNT(*) FROM rack');
+        if (parseInt(res.rows[0].count) === 0) {
+            await client.query(`
+                INSERT INTO rack (id, label, facility_id) VALUES 
+                ('7969edcd-f0bd-43e0-abf9-4656df580e22', 'Rack A1', 'NYC-DC1'),
+                ('8b92b5e2-66cf-448f-8d97-1510f274a1e9', 'Rack B2', 'NYC-DC1'),
+                ('c4d72851-9f15-46f3-a6dc-82559b3ab603', 'Rack C3', 'SFO-DC2')
+            `);
+            console.log('Seeded database with dummy racks');
+        }
     } catch (e) {
         console.error('Failed to create tables:', e);
     } finally {
