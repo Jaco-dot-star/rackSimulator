@@ -21,7 +21,33 @@ mqttClient.on('connect', () => {
 const pgPool = new Pool({
     connectionString: process.env.DATABASE_URL,
 });
-pgPool.connect().then(() => console.log('Connected to Postgres')).catch(err => console.error('Postgres Connection Error', err));
+pgPool.connect().then(async (client) => {
+    console.log('Connected to Postgres');
+    try {
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS rack (
+                id VARCHAR(255) PRIMARY KEY,
+                label VARCHAR(255),
+                facility_id VARCHAR(255)
+            );
+            CREATE TABLE IF NOT EXISTS reading (
+                id SERIAL PRIMARY KEY,
+                facility_id VARCHAR(255),
+                rack_id VARCHAR(255),
+                sensor_type VARCHAR(255),
+                value NUMERIC,
+                unit VARCHAR(50),
+                source_tier VARCHAR(50),
+                timestamp TIMESTAMP
+            );
+        `);
+        console.log('Database tables verified/created');
+    } catch (e) {
+        console.error('Failed to create tables:', e);
+    } finally {
+        client.release();
+    }
+}).catch(err => console.error('Postgres Connection Error', err));
 
 // State Management for Virtual Racks
 // rack: { id, ip, port, protocol: 'mqtt'|'snmp'|'both', state: { inlet_temp: 22, ... } }
