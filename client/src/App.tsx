@@ -3,11 +3,13 @@ import RackVisualizer from './RackVisualizer';
 import ControlPanel from './ControlPanel';
 import VerificationPanel from './VerificationPanel';
 import NetworkConfigModal from './NetworkConfigModal';
-import { Settings, Server, Activity } from 'lucide-react';
+import ConnectionGuideModal from './ConnectionGuideModal';
+import { Settings, Server, Activity, BookOpen } from 'lucide-react';
 
 export default function App() {
   const [activeRackId, setActiveRackId] = useState<string | null>(null);
   const [showConfig, setShowConfig] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
   const [racks, setRacks] = useState<any[]>([]);
 
   const fetchRacks = async () => {
@@ -42,13 +44,22 @@ export default function App() {
             Hardware Simulator
           </h1>
         </div>
-        <button 
-          onClick={() => setShowConfig(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700 text-sm font-medium"
-        >
-          <Settings size={16} />
-          New Virtual Rack
-        </button>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={() => setShowGuide(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-900/50 hover:bg-indigo-800/50 text-indigo-200 rounded-lg transition-colors border border-indigo-700/50 text-sm font-medium"
+          >
+            <BookOpen size={16} />
+            Connection Guide
+          </button>
+          <button 
+            onClick={() => setShowConfig(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700 text-sm font-medium"
+          >
+            <Settings size={16} />
+            New Virtual Rack
+          </button>
+        </div>
       </header>
 
       <main className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden">
@@ -215,15 +226,8 @@ export default function App() {
         </div>
       </main>
 
-      {showConfig && (
-        <NetworkConfigModal 
-          onClose={() => setShowConfig(false)} 
-          onCreated={() => {
-            setShowConfig(false);
-            fetchRacks();
-          }} 
-        />
-      )}
+      {showConfig && <NetworkConfigModal onClose={() => setShowConfig(false)} onCreated={fetchRacks} />}
+      {showGuide && <ConnectionGuideModal onClose={() => setShowGuide(false)} />}
     </div>
   );
 }
