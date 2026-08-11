@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function RackVisualizer({ state }: { state: any }) {
   // A flat, 1D straight-on view of a server rack

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { SlidersHorizontal, Thermometer, Droplets, Zap, Battery } from 'lucide-react';
 
 export default function ControlPanel({ rack, onUpdate }: { rack: any, onUpdate: () => void }) {

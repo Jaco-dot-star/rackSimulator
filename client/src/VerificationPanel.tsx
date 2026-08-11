@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Database, CheckCircle2, Clock } from 'lucide-react';
 
 export default function VerificationPanel({ rackId }: { rackId: string }) {
